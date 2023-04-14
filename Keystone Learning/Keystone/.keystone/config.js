@@ -54,6 +54,7 @@ var lists = {
       name: (0, import_fields.text)(),
       email: (0, import_fields.text)({ validation: { isRequired: true }, isIndexed: "unique" }),
       //       password: password({ validation: { isRequired: true } }),
+      // One Sided relationships
       posts: (0, import_fields.relationship)({ ref: "Post.author", many: true }),
       password: (0, import_fields.password)({ validation: { isRequired: true } })
     }
@@ -133,6 +134,22 @@ var lists = {
   //   }
   // })
   // Hooks
+  // Create User
+  AfterOperation: (0, import_core.list)({
+    access: import_access.allowAll,
+    fields: {
+      name: (0, import_fields.text)(),
+      email: (0, import_fields.text)()
+    },
+    hooks: {
+      afterOperation: ({ operation, item }) => {
+        if (operation === "create") {
+          console.log(`New user created. Name: ${item.name}, Email: ${item.email}`);
+        }
+      }
+    }
+  }),
+  // Update User
   ResolveHook: (0, import_core.list)({
     access: import_access.allowAll,
     fields: {
@@ -151,6 +168,56 @@ var lists = {
         }
         return resolvedData;
       }
+    }
+  }),
+  // Validate Input
+  ValidateInput: (0, import_core.list)({
+    access: import_access.allowAll,
+    fields: {
+      title: (0, import_fields.text)({ validation: { isRequired: true } }),
+      content: (0, import_fields.text)({ validation: { isRequired: true } })
+    },
+    hooks: {
+      validateInput: ({ resolvedData, addValidationError }) => {
+        const { title } = resolvedData;
+        console.log(resolvedData);
+        if (title === "") {
+          addValidationError("The title of a blog post cannot be the empty string");
+        }
+      }
+    }
+  }),
+  // Triggering Side Effect
+  // TriggeringSideEffects: list({
+  //   access: allowAll,
+  //   fields: {
+  //     name: text(),
+  //     email: text(),
+  //    },
+  //   hooks: {
+  //     afterOperation: ({ operation, item }) => {
+  //       if (operation === 'create') {
+  //         console.log(item.name, item.email);
+  //       }
+  //     }
+  //   },
+  // }),
+  // Field Hooks
+  Filed: (0, import_core.list)({
+    access: import_access.allowAll,
+    fields: {
+      name: (0, import_fields.text)(),
+      email: (0, import_fields.text)({
+        validation: { isRequired: true },
+        hooks: {
+          validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
+            const email = resolvedData[fieldKey];
+            if (email !== void 0 && email !== null && !email.includes("@")) {
+              addValidationError(`The email address ${email} provided for the field ${fieldKey} must contain an '@' character`);
+            }
+          }
+        }
+      })
     }
   })
 };

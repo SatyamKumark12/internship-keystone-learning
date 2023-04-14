@@ -14,7 +14,10 @@ const lists = {
     email: text({ validation: { isRequired: true }, isIndexed: "unique" }),
     
     //       password: password({ validation: { isRequired: true } }),
+    // One Sided relationships
+
     posts: relationship({ ref: 'Post.author', many: true }),
+    
     password: password({ validation: { isRequired: true } }),
 
      },
@@ -76,6 +79,7 @@ const lists = {
 Image: image({ storage: "my_local_images" }),
 
         },
+        
       }),
       // Image: list({
       //   access: allowAll,
@@ -100,6 +104,27 @@ Image: image({ storage: "my_local_images" }),
 
       // Hooks
 
+
+        // Create User
+
+        AfterOperation: list({
+          access: allowAll,
+          fields: {
+            name: text(),
+            email: text(),
+           },
+          hooks: {
+            afterOperation: ({ operation, item }) => {
+              if (operation === 'create') {
+                console.log(`New user created. Name: ${item.name}, Email: ${item.email}`);
+              }
+            }
+          },
+        }),
+
+
+        // Update User
+
       ResolveHook: list({
         access: allowAll,
         fields: {
@@ -121,6 +146,70 @@ Image: image({ storage: "my_local_images" }),
           }
         },
       }),
+
+      // Validate Input
+
+      ValidateInput: list({
+        access: allowAll,
+        fields: {
+          title: text({ validation: { isRequired: true } }),
+          content: text({ validation: { isRequired: true } }),
+         },
+        hooks: {
+          validateInput: ({ resolvedData, addValidationError }) => {
+            const { title } = resolvedData;
+            console.log(resolvedData);
+            
+            if (title === '') {
+              // We call addValidationError to indicate an invalid value.
+              addValidationError('The title of a blog post cannot be the empty string');
+              
+            }
+          }
+        },
+      }),
+      
+
+    // Triggering Side Effect
+
+    // TriggeringSideEffects: list({
+    //   access: allowAll,
+    //   fields: {
+    //     name: text(),
+    //     email: text(),
+    //    },
+    //   hooks: {
+    //     afterOperation: ({ operation, item }) => {
+    //       if (operation === 'create') {
+    //         console.log(item.name, item.email);
+    //       }
+    //     }
+    //   },
+    // }),
+
+    // Field Hooks
+
+    Filed: list({
+      access: allowAll,
+      fields: {
+        name: text(),
+        email: text({
+          validation: { isRequired: true },
+          hooks: {
+            validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
+              const email = resolvedData[fieldKey];
+              if (email !== undefined && email !== null && !email.includes('@')) {
+                addValidationError(`The email address ${email} provided for the field ${fieldKey} must contain an '@' character`);
+              }
+            },
+          },
+        }),
+       },
+    }),
+
+   
+
+    
     
     
 }

@@ -257,6 +257,46 @@ input UserRelateToOneForCreateInput {
   connect: UserWhereUniqueInput
 }
 
+type AfterOperation {
+  id: ID!
+  name: String
+  email: String
+}
+
+input AfterOperationWhereUniqueInput {
+  id: ID
+}
+
+input AfterOperationWhereInput {
+  AND: [AfterOperationWhereInput!]
+  OR: [AfterOperationWhereInput!]
+  NOT: [AfterOperationWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  email: StringFilter
+}
+
+input AfterOperationOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  email: OrderDirection
+}
+
+input AfterOperationUpdateInput {
+  name: String
+  email: String
+}
+
+input AfterOperationUpdateArgs {
+  where: AfterOperationWhereUniqueInput!
+  data: AfterOperationUpdateInput!
+}
+
+input AfterOperationCreateInput {
+  name: String
+  email: String
+}
+
 type ResolveHook {
   id: ID!
   title: String
@@ -297,6 +337,86 @@ input ResolveHookCreateInput {
   content: String
 }
 
+type ValidateInput {
+  id: ID!
+  title: String
+  content: String
+}
+
+input ValidateInputWhereUniqueInput {
+  id: ID
+}
+
+input ValidateInputWhereInput {
+  AND: [ValidateInputWhereInput!]
+  OR: [ValidateInputWhereInput!]
+  NOT: [ValidateInputWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  content: StringFilter
+}
+
+input ValidateInputOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  content: OrderDirection
+}
+
+input ValidateInputUpdateInput {
+  title: String
+  content: String
+}
+
+input ValidateInputUpdateArgs {
+  where: ValidateInputWhereUniqueInput!
+  data: ValidateInputUpdateInput!
+}
+
+input ValidateInputCreateInput {
+  title: String
+  content: String
+}
+
+type Filed {
+  id: ID!
+  name: String
+  email: String
+}
+
+input FiledWhereUniqueInput {
+  id: ID
+}
+
+input FiledWhereInput {
+  AND: [FiledWhereInput!]
+  OR: [FiledWhereInput!]
+  NOT: [FiledWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  email: StringFilter
+}
+
+input FiledOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  email: OrderDirection
+}
+
+input FiledUpdateInput {
+  name: String
+  email: String
+}
+
+input FiledUpdateArgs {
+  where: FiledWhereUniqueInput!
+  data: FiledUpdateInput!
+}
+
+input FiledCreateInput {
+  name: String
+  email: String
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -315,12 +435,30 @@ type Mutation {
   updatePosts(data: [PostUpdateArgs!]!): [Post]
   deletePost(where: PostWhereUniqueInput!): Post
   deletePosts(where: [PostWhereUniqueInput!]!): [Post]
+  createAfterOperation(data: AfterOperationCreateInput!): AfterOperation
+  createAfterOperations(data: [AfterOperationCreateInput!]!): [AfterOperation]
+  updateAfterOperation(where: AfterOperationWhereUniqueInput!, data: AfterOperationUpdateInput!): AfterOperation
+  updateAfterOperations(data: [AfterOperationUpdateArgs!]!): [AfterOperation]
+  deleteAfterOperation(where: AfterOperationWhereUniqueInput!): AfterOperation
+  deleteAfterOperations(where: [AfterOperationWhereUniqueInput!]!): [AfterOperation]
   createResolveHook(data: ResolveHookCreateInput!): ResolveHook
   createResolveHooks(data: [ResolveHookCreateInput!]!): [ResolveHook]
   updateResolveHook(where: ResolveHookWhereUniqueInput!, data: ResolveHookUpdateInput!): ResolveHook
   updateResolveHooks(data: [ResolveHookUpdateArgs!]!): [ResolveHook]
   deleteResolveHook(where: ResolveHookWhereUniqueInput!): ResolveHook
   deleteResolveHooks(where: [ResolveHookWhereUniqueInput!]!): [ResolveHook]
+  createValidateInput(data: ValidateInputCreateInput!): ValidateInput
+  createValidateInputs(data: [ValidateInputCreateInput!]!): [ValidateInput]
+  updateValidateInput(where: ValidateInputWhereUniqueInput!, data: ValidateInputUpdateInput!): ValidateInput
+  updateValidateInputs(data: [ValidateInputUpdateArgs!]!): [ValidateInput]
+  deleteValidateInput(where: ValidateInputWhereUniqueInput!): ValidateInput
+  deleteValidateInputs(where: [ValidateInputWhereUniqueInput!]!): [ValidateInput]
+  createFiled(data: FiledCreateInput!): Filed
+  createFileds(data: [FiledCreateInput!]!): [Filed]
+  updateFiled(where: FiledWhereUniqueInput!, data: FiledUpdateInput!): Filed
+  updateFileds(data: [FiledUpdateArgs!]!): [Filed]
+  deleteFiled(where: FiledWhereUniqueInput!): Filed
+  deleteFileds(where: [FiledWhereUniqueInput!]!): [Filed]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -350,9 +488,18 @@ type Query {
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   post(where: PostWhereUniqueInput!): Post
   postsCount(where: PostWhereInput! = {}): Int
+  afterOperations(where: AfterOperationWhereInput! = {}, orderBy: [AfterOperationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AfterOperationWhereUniqueInput): [AfterOperation!]
+  afterOperation(where: AfterOperationWhereUniqueInput!): AfterOperation
+  afterOperationsCount(where: AfterOperationWhereInput! = {}): Int
   resolveHooks(where: ResolveHookWhereInput! = {}, orderBy: [ResolveHookOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ResolveHookWhereUniqueInput): [ResolveHook!]
   resolveHook(where: ResolveHookWhereUniqueInput!): ResolveHook
   resolveHooksCount(where: ResolveHookWhereInput! = {}): Int
+  validateInputs(where: ValidateInputWhereInput! = {}, orderBy: [ValidateInputOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ValidateInputWhereUniqueInput): [ValidateInput!]
+  validateInput(where: ValidateInputWhereUniqueInput!): ValidateInput
+  validateInputsCount(where: ValidateInputWhereInput! = {}): Int
+  fileds(where: FiledWhereInput! = {}, orderBy: [FiledOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FiledWhereUniqueInput): [Filed!]
+  filed(where: FiledWhereUniqueInput!): Filed
+  filedsCount(where: FiledWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

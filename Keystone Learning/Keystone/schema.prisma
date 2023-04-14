@@ -36,8 +36,26 @@ model Post {
   @@index([authorId])
 }
 
+model AfterOperation {
+  id    String @id @default(cuid())
+  name  String @default("")
+  email String @default("")
+}
+
 model ResolveHook {
   id      String @id @default(cuid())
   title   String @default("")
   content String @default("")
+}
+
+model ValidateInput {
+  id      String @id @default(cuid())
+  title   String @default("")
+  content String @default("")
+}
+
+model Filed {
+  id    String @id @default(cuid())
+  name  String @default("")
+  email String @default("")
 }
