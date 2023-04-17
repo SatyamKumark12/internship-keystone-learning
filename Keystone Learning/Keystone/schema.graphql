@@ -8,6 +8,7 @@ type User {
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
   password: PasswordState
+  isAdmin: Boolean
 }
 
 type PasswordState {
@@ -27,6 +28,7 @@ input UserWhereInput {
   name: StringFilter
   email: StringFilter
   posts: PostManyRelationFilter
+  isAdmin: BooleanFilter
 }
 
 input IDFilter {
@@ -80,10 +82,16 @@ input PostManyRelationFilter {
   none: PostWhereInput
 }
 
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
 input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
   email: OrderDirection
+  isAdmin: OrderDirection
 }
 
 enum OrderDirection {
@@ -96,6 +104,7 @@ input UserUpdateInput {
   email: String
   posts: PostRelateToManyForUpdateInput
   password: String
+  isAdmin: Boolean
 }
 
 input PostRelateToManyForUpdateInput {
@@ -115,6 +124,7 @@ input UserCreateInput {
   email: String
   posts: PostRelateToManyForCreateInput
   password: String
+  isAdmin: Boolean
 }
 
 input PostRelateToManyForCreateInput {
@@ -417,6 +427,65 @@ input FiledCreateInput {
   email: String
 }
 
+type Product {
+  id: ID!
+  Product: String
+  Description: String
+  Price: Int
+  Image: ImageFieldOutput
+}
+
+input ProductWhereUniqueInput {
+  id: ID
+}
+
+input ProductWhereInput {
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+  id: IDFilter
+  Product: StringFilter
+  Description: StringFilter
+  Price: IntFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input ProductOrderByInput {
+  id: OrderDirection
+  Product: OrderDirection
+  Description: OrderDirection
+  Price: OrderDirection
+}
+
+input ProductUpdateInput {
+  Product: String
+  Description: String
+  Price: Int
+  Image: ImageFieldInput
+}
+
+input ProductUpdateArgs {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateInput!
+}
+
+input ProductCreateInput {
+  Product: String
+  Description: String
+  Price: Int
+  Image: ImageFieldInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -459,6 +528,12 @@ type Mutation {
   updateFileds(data: [FiledUpdateArgs!]!): [Filed]
   deleteFiled(where: FiledWhereUniqueInput!): Filed
   deleteFileds(where: [FiledWhereUniqueInput!]!): [Filed]
+  createProduct(data: ProductCreateInput!): Product
+  createProducts(data: [ProductCreateInput!]!): [Product]
+  updateProduct(where: ProductWhereUniqueInput!, data: ProductUpdateInput!): Product
+  updateProducts(data: [ProductUpdateArgs!]!): [Product]
+  deleteProduct(where: ProductWhereUniqueInput!): Product
+  deleteProducts(where: [ProductWhereUniqueInput!]!): [Product]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -500,6 +575,9 @@ type Query {
   fileds(where: FiledWhereInput! = {}, orderBy: [FiledOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FiledWhereUniqueInput): [Filed!]
   filed(where: FiledWhereUniqueInput!): Filed
   filedsCount(where: FiledWhereInput! = {}): Int
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  product(where: ProductWhereUniqueInput!): Product
+  productsCount(where: ProductWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

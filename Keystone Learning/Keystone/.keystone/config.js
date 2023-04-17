@@ -32,7 +32,8 @@ var import_session = require("@keystone-6/core/session");
 var { withAuth } = (0, import_auth.createAuth)({
   listKey: "User",
   identityField: "email",
-  sessionData: "name",
+  // sessionData: 'name',
+  sessionData: "isAdmin",
   secretField: "password",
   initFirstItem: {
     fields: ["name", "email", "password"]
@@ -47,6 +48,14 @@ var session = (0, import_session.statelessSessions)({
 
 // keystone.ts
 var import_fields_document = require("@keystone-6/fields-document");
+var isAdmin = ({ session: session2 }) => {
+  console.log(session2);
+  if (!session2)
+    return false;
+  if (session2?.data.isAdmin)
+    return true;
+  return false;
+};
 var lists = {
   User: (0, import_core.list)({
     access: import_access.allowAll,
@@ -56,7 +65,13 @@ var lists = {
       //       password: password({ validation: { isRequired: true } }),
       // One Sided relationships
       posts: (0, import_fields.relationship)({ ref: "Post.author", many: true }),
-      password: (0, import_fields.password)({ validation: { isRequired: true } })
+      password: (0, import_fields.password)({ validation: { isRequired: true } }),
+      isAdmin: (0, import_fields.checkbox)()
+    },
+    ui: {
+      listView: {
+        initialColumns: ["name", "email", "isAdmin"]
+      }
     }
   }),
   //  Post: list({
@@ -218,6 +233,30 @@ var lists = {
           }
         }
       })
+    }
+  }),
+  //  Sign In
+  Product: (0, import_core.list)({
+    access: {
+      operation: {
+        create: isAdmin,
+        update: isAdmin,
+        delete: isAdmin
+      }
+    },
+    fields: {
+      Product: (0, import_fields.text)({ validation: { isRequired: true } }),
+      Description: (0, import_fields.text)({ validation: { isRequired: true } }),
+      Price: (0, import_fields.integer)({ validation: { isRequired: true } }),
+      Image: (0, import_fields.image)({ storage: "my_local_images" })
+    },
+    hooks: {
+      validateInput: ({ resolvedData, addValidationError }) => {
+        const { title } = resolvedData;
+        if (title === "") {
+          addValidationError("The title of a blog post cannot be the empty string");
+        }
+      }
     }
   })
 };

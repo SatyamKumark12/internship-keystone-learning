@@ -15,14 +15,42 @@ model User {
   id        String    @id @default(cuid())
   name      String    @default("")
   email     String    @unique @default("")
-  password  String
-  posts     Post[]    @relation("Post_authors")
+  password  String?
+  isAdmin   Boolean   @default(false)
+  posts     Post[]    @relation("Post_author")
   createdAt DateTime? @default(now())
 }
 
 model Post {
-  id      String @id @default(cuid())
-  title   String @default("")
-  content String @default("")
-  authors User[] @relation("Post_authors")
+  id       String  @id @default(cuid())
+  title    String  @default("")
+  content  Json    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author   User?   @relation("Post_author", fields: [authorId], references: [id])
+  authorId String? @map("author")
+
+  @@index([authorId])
+}
+
+model Product {
+  id              String  @id @default(cuid())
+  Product         String  @default("")
+  Description     String  @default("")
+  Price           Int
+  Image_filesize  Int?
+  Image_extension String?
+  Image_width     Int?
+  Image_height    Int?
+  Image_id        String?
+}
+
+model Counter {
+  id              String  @id @default(cuid())
+  Product         String  @default("")
+  Description     String  @default("")
+  Price           Int
+  Image_filesize  Int?
+  Image_extension String?
+  Image_width     Int?
+  Image_height    Int?
+  Image_id        String?
 }

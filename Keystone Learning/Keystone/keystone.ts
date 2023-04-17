@@ -1,9 +1,27 @@
 import { config, list } from '@keystone-6/core';
 import { allowAll } from '@keystone-6/core/access';
-import { text , password , timestamp , relationship , select , image , file} from '@keystone-6/core/fields';
+import { text , password , timestamp , relationship , select , image , file , checkbox , integer} from '@keystone-6/core/fields';
 import { withAuth, session } from './auth';
 import { document } from '@keystone-6/fields-document';
 import type { StorageConfig } from '@keystone-6/core/types';
+
+type Session = {
+  data: {
+    id: string;
+    isAdmin: boolean;
+  }
+}
+
+const isAdmin = ({ session }: { session: Session | undefined }) => {
+  // if the user is an Admin, they can access all the records
+  console.log(session);
+  if(!session) return false;
+  
+  if (session?.data.isAdmin) return true;
+  // otherwise, filter for published posts
+  return false;
+}
+
 
 const lists = {
 
@@ -19,8 +37,14 @@ const lists = {
     posts: relationship({ ref: 'Post.author', many: true }),
     
     password: password({ validation: { isRequired: true } }),
+    isAdmin: checkbox(),
 
      },
+     ui:{
+      listView:{
+        initialColumns : ['name' , 'email' , 'isAdmin'],
+      },
+    },
      }), 
     //  Post: list({
     //     access : allowAll,
@@ -205,6 +229,33 @@ Image: image({ storage: "my_local_images" }),
           },
         }),
        },
+    }),
+
+    //  Sign In
+
+    Product: list({
+      access: {
+        operation: {
+          create: isAdmin,
+          update: isAdmin,
+          delete: isAdmin,
+        },
+      },
+      fields: {
+        Product: text({ validation: { isRequired: true } }),
+        Description: text({ validation: { isRequired: true } }),
+        Price: integer({ validation: { isRequired: true } }),
+        Image: image({ storage: "my_local_images" }),
+       },
+      hooks: {
+        validateInput: ({ resolvedData, addValidationError }) => {
+          const { title } = resolvedData;
+          if (title === '') {
+            // We call addValidationError to indicate an invalid value.
+            addValidationError('The title of a blog post cannot be the empty string');
+          }
+        }
+      },
     }),
 
    

@@ -12,11 +12,12 @@ generator client {
 }
 
 model User {
-  id       String @id @default(cuid())
-  name     String @default("")
-  email    String @unique @default("")
-  posts    Post[] @relation("Post_author")
+  id       String  @id @default(cuid())
+  name     String  @default("")
+  email    String  @unique @default("")
+  posts    Post[]  @relation("Post_author")
   password String
+  isAdmin  Boolean @default(false)
 }
 
 model Post {
@@ -58,4 +59,16 @@ model Filed {
   id    String @id @default(cuid())
   name  String @default("")
   email String @default("")
+}
+
+model Product {
+  id              String  @id @default(cuid())
+  Product         String  @default("")
+  Description     String  @default("")
+  Price           Int
+  Image_filesize  Int?
+  Image_extension String?
+  Image_width     Int?
+  Image_height    Int?
+  Image_id        String?
 }
