@@ -179,6 +179,12 @@ var keystone_default = withAuth(
       url: "postgres://postgres:Satu@7890@localhost:5432/postgres"
     },
     lists,
-    session
+    session,
+    server: {
+      cors: {
+        origin: ["http://localhost:3000", "http://localhost:3001"],
+        credentials: true
+      }
+    }
   })
 );

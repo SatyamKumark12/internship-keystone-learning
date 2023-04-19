@@ -94,7 +94,7 @@ export const lists: Lists = {
       phone: relationship({ ref: "Phone.company", many: true }),
     },
   }),
-
+  
   Phone: list({
     access: allowAll,
     fields: {

@@ -15,8 +15,8 @@ const PhoneList = ({ data }: { data: MyData[] }) => {
     <h1> List of phones</h1>
       {data.map((item) => (
         <p key={item.id}>
-          <Link href={`/phone/${item.id}`}>
-            <a>{item.name}</a>
+          <Link href={`/phone/${item.id}`} className='text-3xl'>
+           {item.name}
           </Link>
         </p>
       ))}
@@ -33,7 +33,7 @@ interface Company {
     const { data } = await client.query({
       query: gql`
         query {
-          allCompanies {
+          companies {
             id
           }
         }
@@ -59,23 +59,25 @@ export async function getStaticProps({ params }: { params: Params }) {
     const { id } = params;
     const { data } = await client.query({
       query: gql`
-        query Company($id: ID!) {
-          Company(where: { id: $id }) {
+        query company($id: ID!) {
+          company(where: { id: $id }) {
             phone {
               name
               id
             }
           }
-        }
+        } 
       `,
       variables: { id },
     });
     return {
       props: {
-        data: data.Company.phone,
+        data: data.company.phone,
       },
     };
   }
+
+  
   
 
 export default PhoneList;

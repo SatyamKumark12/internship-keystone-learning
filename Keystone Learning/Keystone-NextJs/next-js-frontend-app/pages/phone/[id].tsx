@@ -2,11 +2,24 @@ import React from 'react';
 import { gql } from "@apollo/client";
 import client from "../../helpers/apollo-client";
 import Link from "next/link";
+import { DocumentRenderer } from '@keystone-6/document-renderer';
 
-const PhoneData = () => {
+
+interface PhoneDataProps {
+  data: {
+    name: string,
+    document: {
+      document: string
+    }
+  }
+}
+
+const PhoneData = ({ data }: PhoneDataProps) => {
   return (
     <>
-    
+    <h1>Phone name: {data.name}</h1>
+      <h2>Description:</h2>
+      {/* <DocumentRenderer document={data.document.document} /> */}
     </>
   )
 }
@@ -49,8 +62,8 @@ export async function getStaticProps({ params }: { params: Params }) {
     const { id } = params;
     const { data } = await client.query({
       query: gql`
-        query Phone($id: ID!) {
-          Phone(where: { id: $id }) {
+        query phone($id: ID!) {
+          phone(where: { id: $id }) {
             name
             id
             document {
@@ -63,7 +76,7 @@ export async function getStaticProps({ params }: { params: Params }) {
     });
     return {
       props: {
-        data: data.Phone,
+        data: data.phone,
       },
     };
   }

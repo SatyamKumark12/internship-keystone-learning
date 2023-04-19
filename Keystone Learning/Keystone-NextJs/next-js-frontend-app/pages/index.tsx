@@ -123,6 +123,7 @@ export default function Home() {
     // </main>
 
     <>
+    
      <p className='text-3xl'>Home page</p>
       <p>
         <Link href="/company" className='text-3xl'>See the list of companies</Link>
