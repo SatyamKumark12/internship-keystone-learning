@@ -6,10 +6,30 @@ import {
   password,
   timestamp,
   select,
+  checkbox,
+  integer,
+  image,
 } from '@keystone-6/core/fields';
 
 import { document } from '@keystone-6/fields-document';
 import type { Lists } from '.keystone/types';
+
+type Session = {
+  data: {
+    id: string;
+    isAdmin: boolean;
+  }
+}
+
+const isAdmin = ({ session }: { session: Session | undefined }) => {
+  // if the user is an Admin, they can access all the records
+  console.log(session);
+  if(!session) return false;
+  
+  if (session?.data.isAdmin) return true;
+  // otherwise, filter for published posts
+  return false;
+}
 
 export const lists: Lists = {
   User: list({
@@ -29,6 +49,13 @@ export const lists: Lists = {
       createdAt: timestamp({
         defaultValue: { kind: 'now' },
       }),
+
+      isAdmin: checkbox(),
+    },
+     ui:{
+      listView:{
+        initialColumns : ['name' , 'email' , 'isAdmin'],
+      },
     },
   }),
 
@@ -124,6 +151,32 @@ export const lists: Lists = {
         layouts: [],
         dividers: true,
       }),
+    },
+  }),
+
+
+  Product: list({
+    access: {
+      operation: {
+        create: isAdmin,
+        update: isAdmin,
+        delete: isAdmin,
+      },
+    },
+    fields: {
+      Product: text({ validation: { isRequired: true } }),
+      Description: text({ validation: { isRequired: true } }),
+      Price: integer({ validation: { isRequired: true } }),
+      Image: image({ storage: "my_local_images" }),
+     },
+    hooks: {
+      validateInput: ({ resolvedData, addValidationError }) => {
+        const { title } = resolvedData;
+        if (title === '') {
+          // We call addValidationError to indicate an invalid value.
+          addValidationError('The title of a blog post cannot be the empty string');
+        }
+      }
     },
   }),
 

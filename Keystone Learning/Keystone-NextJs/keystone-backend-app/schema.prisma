@@ -17,6 +17,7 @@ model User {
   email     String    @unique @default("")
   password  String
   createdAt DateTime? @default(now())
+  isAdmin   Boolean   @default(false)
 }
 
 model Post {
@@ -40,4 +41,16 @@ model Phone {
   document  Json     @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
 
   @@index([companyId])
+}
+
+model Product {
+  id              String  @id @default(cuid())
+  Product         String  @default("")
+  Description     String  @default("")
+  Price           Int
+  Image_filesize  Int?
+  Image_extension String?
+  Image_width     Int?
+  Image_height    Int?
+  Image_id        String?
 }
