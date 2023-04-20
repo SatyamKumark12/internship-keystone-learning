@@ -14,6 +14,8 @@ import {
 import { document } from '@keystone-6/fields-document';
 import type { Lists } from '.keystone/types';
 
+
+
 type Session = {
   data: {
     id: string;
@@ -45,7 +47,7 @@ export const lists: Lists = {
 
       password: password({ validation: { isRequired: true } }),
       // posts: relationship({ ref: 'Post.author', many: true }),
-
+  
       createdAt: timestamp({
         defaultValue: { kind: 'now' },
       }),

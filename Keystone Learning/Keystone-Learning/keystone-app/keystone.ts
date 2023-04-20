@@ -1,18 +1,14 @@
-// Welcome to Keystone!
-//
-// This file is what Keystone uses as the entry-point to your headless backend
-//
-// Keystone imports the default export of this file, expecting a Keystone configuration object
-//   you can find out more at https://keystonejs.com/docs/apis/config
-
 import { config } from '@keystone-6/core';
-
-// to keep this file tidy, we define our schema in a different file
 import { lists } from './schema';
-
-// authentication is configured separately here too, but you might move this elsewhere
-// when you write your list-level access control functions, as they typically rely on session data
 import { withAuth, session } from './auth';
+import {
+  BaseListTypeInfo,
+  FieldTypeFunc,
+  CommonFieldConfig,
+  fieldType,
+  orderDirectionEnum,
+} from '@keystone-6/core/types';
+import { graphql } from '@keystone-6/core';
 
 const {
 
@@ -23,6 +19,33 @@ const {
   ASSET_BASE_URL: baseUrl = "http://localhost:3000",
   
   } = process.env;
+
+  export type MyIntFieldConfig<ListTypeInfo extends BaseListTypeInfo> =
+  CommonFieldConfig<ListTypeInfo> & {
+    isIndexed?: boolean | 'unique';
+  };
+
+export const myInt =
+  <ListTypeInfo extends BaseListTypeInfo>({
+    isIndexed,
+    ...config
+  }: MyIntFieldConfig<ListTypeInfo> = {}): FieldTypeFunc<ListTypeInfo> =>
+  meta =>
+    fieldType({
+      kind: 'scalar',
+      mode: 'optional',
+      scalar: 'Int',
+      index: isIndexed === true ? 'index' : isIndexed || undefined,
+    })({
+      ...config,
+      input: {
+        create: { arg: graphql.arg({ type: graphql.Int }) },
+        update: { arg: graphql.arg({ type: graphql.Int }) },
+        orderBy: { arg: graphql.arg({ type: orderDirectionEnum }) },
+      },
+      output: graphql.field({ type: graphql.Int }),
+      views: './view',
+    });
 
 
 

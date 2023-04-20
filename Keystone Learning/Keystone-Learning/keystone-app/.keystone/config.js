@@ -20,7 +20,8 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // keystone.ts
 var keystone_exports = {};
 __export(keystone_exports, {
-  default: () => keystone_default
+  default: () => keystone_default,
+  myInt: () => myInt
 });
 module.exports = __toCommonJS(keystone_exports);
 var import_core2 = require("@keystone-6/core");
@@ -227,6 +228,8 @@ var session = (0, import_session.statelessSessions)({
 });
 
 // keystone.ts
+var import_types = require("@keystone-6/core/types");
+var import_core3 = require("@keystone-6/core");
 var {
   S3_BUCKET_NAME: bucketName = "keystone-test",
   S3_REGION: region = "ap-southeast-2",
@@ -234,6 +237,24 @@ var {
   S3_SECRET_ACCESS_KEY: secretAccessKey = "keystone",
   ASSET_BASE_URL: baseUrl = "http://localhost:3000"
 } = process.env;
+var myInt = ({
+  isIndexed,
+  ...config2
+} = {}) => (meta) => (0, import_types.fieldType)({
+  kind: "scalar",
+  mode: "optional",
+  scalar: "Int",
+  index: isIndexed === true ? "index" : isIndexed || void 0
+})({
+  ...config2,
+  input: {
+    create: { arg: import_core3.graphql.arg({ type: import_core3.graphql.Int }) },
+    update: { arg: import_core3.graphql.arg({ type: import_core3.graphql.Int }) },
+    orderBy: { arg: import_core3.graphql.arg({ type: import_types.orderDirectionEnum }) }
+  },
+  output: import_core3.graphql.field({ type: import_core3.graphql.Int }),
+  views: "./view"
+});
 var keystone_default = withAuth(
   (0, import_core2.config)({
     db: {
@@ -258,3 +279,7 @@ var keystone_default = withAuth(
     }
   })
 );
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  myInt
+});
