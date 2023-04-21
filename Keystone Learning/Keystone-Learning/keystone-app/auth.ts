@@ -37,7 +37,7 @@ const { withAuth } = createAuth({
   //   this can be helpful for when you are writing your access control functions
   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
   // sessionData: 'name createdAt',
-  sessionData: 'isAdmin',
+  sessionData: 'name createdAt',
   secretField: 'password',
 
   // WARNING: remove initFirstItem functionality in production

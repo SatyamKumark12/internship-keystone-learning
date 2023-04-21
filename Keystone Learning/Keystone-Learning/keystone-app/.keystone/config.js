@@ -20,96 +20,87 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // keystone.ts
 var keystone_exports = {};
 __export(keystone_exports, {
-  default: () => keystone_default,
-  myInt: () => myInt
+  default: () => keystone_default
 });
 module.exports = __toCommonJS(keystone_exports);
-var import_core2 = require("@keystone-6/core");
+var import_core3 = require("@keystone-6/core");
 
 // schema.ts
-var import_core = require("@keystone-6/core");
+var import_core2 = require("@keystone-6/core");
 var import_access = require("@keystone-6/core/access");
 var import_fields = require("@keystone-6/core/fields");
-var import_fields_document = require("@keystone-6/fields-document");
-var import_fields2 = require("@keystone-6/core/fields");
-var isUser = ({ session: session2 }) => !!session2?.data.id;
-var isAdmin = ({ session: session2 }) => session2?.data.isAdmin;
-var isPerson = ({ session: session2, item }) => session2?.data.id === item.id;
-var isAdminOrPerson = ({ session: session2, item }) => isAdmin({ session: session2 }) || isPerson({ session: session2, item });
-var lists = {
-  User: (0, import_core.list)({
-    access: {
-      operation: {
-        create: isAdmin,
-        delete: isAdmin
-      },
-      item: {
-        update: isAdminOrPerson
-      }
-    },
-    fields: {
-      // name: text({ validation: { isRequired: true } }),
-      name: (0, import_fields.text)(),
-      email: (0, import_fields.text)({
-        validation: { isRequired: true },
-        isIndexed: "unique",
-        access: {
-          read: isAdminOrPerson
+
+// custom-fields/index.ts
+var import_types = require("@keystone-6/core/types");
+var import_core = require("@keystone-6/core");
+function text({
+  isIndexed,
+  ...config2
+} = {}) {
+  return (meta) => (0, import_types.fieldType)({
+    kind: "scalar",
+    mode: "optional",
+    scalar: "String",
+    index: isIndexed === true ? "index" : isIndexed || void 0
+  })({
+    ...config2,
+    input: {
+      create: {
+        arg: import_core.graphql.arg({ type: import_core.graphql.String }),
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        resolve(value, context) {
+          return value;
         }
+      },
+      update: { arg: import_core.graphql.arg({ type: import_core.graphql.String }) },
+      orderBy: { arg: import_core.graphql.arg({ type: import_types.orderDirectionEnum }) }
+    },
+    output: import_core.graphql.field({
+      type: import_core.graphql.String,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      resolve({ value, item }, args, context, info) {
+        return value;
+      }
+    }),
+    views: "./1-text-field/views",
+    getAdminMeta() {
+      return {};
+    }
+  });
+}
+
+// schema.ts
+var lists = {
+  User: (0, import_core2.list)({
+    access: import_access.allowAll,
+    fields: {
+      name: text(),
+      email: text({
+        // validation: { isRequired: true },
+        isIndexed: "unique"
       }),
-      password: (0, import_fields.password)({ access: {
-        // Note: password fields never reveal their value, only whether a value exists
-        read: isAdminOrPerson,
-        update: isPerson
-      } }),
-      isAdmin: (0, import_fields.checkbox)({ access: {
-        read: isUser,
-        update: isAdmin
-      } }),
+      password: (0, import_fields.password)({ validation: { isRequired: true } }),
       posts: (0, import_fields.relationship)({ ref: "Post.author", many: true }),
-      // isAdmin: checkbox(),
-      // Two Sided 
-      // One to One
-      // post: relationship({ ref: 'Post.author', many: false }),
-      // One to Many
-      // posts: relationship({ref: 'Post.author', many: true }),
-      // Many to Many
-      // posts: relationship({ ref: 'Post.authors', many: true }),
       createdAt: (0, import_fields.timestamp)({
         defaultValue: { kind: "now" }
       })
-    },
-    ui: {
-      listView: {
-        initialColumns: ["name", "email", "isAdmin"]
-      }
     }
   }),
-  Post: (0, import_core.list)({
+  Post: (0, import_core2.list)({
     access: import_access.allowAll,
     fields: {
-      title: (0, import_fields.text)({ validation: { isRequired: true } }),
-      content: (0, import_fields_document.document)({
-        formatting: true,
-        layouts: [
-          [1, 1],
-          [1, 1, 1],
-          [2, 1],
-          [1, 2],
-          [1, 2, 1]
-        ],
-        links: true,
-        dividers: true
-      }),
-      // title: text(),
-      //   content: text(),
-      // author: relationship({ ref: 'User', many: true }),
-      // One to One
-      // author: relationship({ ref: 'User.post', many: false }),
-      // One to Many
-      // author: relationship({ ref: 'User.posts', many: false }),
-      // Many to Many
-      // authors: relationship({ ref: 'User.posts', many: true }),
+      //   title: text({ validation: { isRequired: true } }),
+      //     formatting: true,
+      //     layouts: [
+      //       [1, 1],
+      //       [1, 1, 1],
+      //       [2, 1],
+      //       [1, 2],
+      //       [1, 2, 1],
+      //     ],
+      //     links: true,
+      //     dividers: true,
+      //   }),
       author: (0, import_fields.relationship)({
         ref: "User.posts",
         ui: {
@@ -120,77 +111,31 @@ var lists = {
           inlineConnect: true
         },
         many: false
+      }),
+      tags: (0, import_fields.relationship)({
+        ref: "Tag.posts",
+        many: true,
+        ui: {
+          displayMode: "cards",
+          cardFields: ["name"],
+          inlineEdit: { fields: ["name"] },
+          linkToItem: true,
+          inlineConnect: true,
+          inlineCreate: { fields: ["name"] }
+        }
       })
-      // tags: relationship({
-      //   ref: 'Tag.posts',
-      //   many: true,
-      //   ui: {
-      //     displayMode: 'cards',
-      //     cardFields: ['name'],
-      //     inlineEdit: { fields: ['name'] },
-      //     linkToItem: true,
-      //     inlineConnect: true,
-      //     inlineCreate: { fields: ['name'] },
-      //   },
-      // }),
     }
   }),
-  Product: (0, import_core.list)({
-    access: {
-      operation: {
-        create: isAdmin,
-        update: isAdmin,
-        delete: isAdmin
-      }
+  Tag: (0, import_core2.list)({
+    access: import_access.allowAll,
+    ui: {
+      isHidden: true
     },
     fields: {
-      Product: (0, import_fields.text)({ validation: { isRequired: true } }),
-      Description: (0, import_fields.text)({ validation: { isRequired: true } }),
-      Price: (0, import_fields.integer)({ validation: { isRequired: true } }),
-      Image: (0, import_fields2.image)({ storage: "my_local_images" })
-    },
-    hooks: {
-      validateInput: ({ resolvedData, addValidationError }) => {
-        const { title } = resolvedData;
-        if (title === "") {
-          addValidationError("The title of a blog post cannot be the empty string");
-        }
-      }
-    }
-  }),
-  Counter: (0, import_core.list)({
-    access: {
-      operation: {
-        create: isAdmin,
-        update: isAdmin,
-        delete: isAdmin
-      }
-    },
-    fields: {
-      Product: (0, import_fields.text)({ validation: { isRequired: true } }),
-      Description: (0, import_fields.text)({ validation: { isRequired: true } }),
-      Price: (0, import_fields.integer)({ validation: { isRequired: true } }),
-      Image: (0, import_fields2.image)({ storage: "my_local_images" })
-    },
-    hooks: {
-      validateInput: ({ resolvedData, addValidationError }) => {
-        const { title } = resolvedData;
-        if (title === "") {
-          addValidationError("The title of a blog post cannot be the empty string");
-        }
-      }
+      name: text(),
+      posts: (0, import_fields.relationship)({ ref: "Post.tags", many: true })
     }
   })
-  // Tag: list({
-  //   access: allowAll,
-  //   ui: {
-  //     isHidden: true,
-  //   },
-  //   fields: {
-  //     name: text(),
-  //     posts: relationship({ ref: 'Post.tags', many: true }),
-  //   },
-  // }),
 };
 
 // auth.ts
@@ -208,7 +153,7 @@ var { withAuth } = (0, import_auth.createAuth)({
   //   this can be helpful for when you are writing your access control functions
   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
   // sessionData: 'name createdAt',
-  sessionData: "isAdmin",
+  sessionData: "name createdAt",
   secretField: "password",
   // WARNING: remove initFirstItem functionality in production
   //   see https://keystonejs.com/docs/config/auth#init-first-item for more
@@ -228,8 +173,6 @@ var session = (0, import_session.statelessSessions)({
 });
 
 // keystone.ts
-var import_types = require("@keystone-6/core/types");
-var import_core3 = require("@keystone-6/core");
 var {
   S3_BUCKET_NAME: bucketName = "keystone-test",
   S3_REGION: region = "ap-southeast-2",
@@ -237,26 +180,8 @@ var {
   S3_SECRET_ACCESS_KEY: secretAccessKey = "keystone",
   ASSET_BASE_URL: baseUrl = "http://localhost:3000"
 } = process.env;
-var myInt = ({
-  isIndexed,
-  ...config2
-} = {}) => (meta) => (0, import_types.fieldType)({
-  kind: "scalar",
-  mode: "optional",
-  scalar: "Int",
-  index: isIndexed === true ? "index" : isIndexed || void 0
-})({
-  ...config2,
-  input: {
-    create: { arg: import_core3.graphql.arg({ type: import_core3.graphql.Int }) },
-    update: { arg: import_core3.graphql.arg({ type: import_core3.graphql.Int }) },
-    orderBy: { arg: import_core3.graphql.arg({ type: import_types.orderDirectionEnum }) }
-  },
-  output: import_core3.graphql.field({ type: import_core3.graphql.Int }),
-  views: "./view"
-});
 var keystone_default = withAuth(
-  (0, import_core2.config)({
+  (0, import_core3.config)({
     db: {
       // we're using sqlite for the fastest startup experience
       //   for more information on what database might be appropriate for you
@@ -279,7 +204,3 @@ var keystone_default = withAuth(
     }
   })
 );
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  myInt
-});

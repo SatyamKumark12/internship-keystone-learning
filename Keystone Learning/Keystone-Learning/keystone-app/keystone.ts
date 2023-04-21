@@ -1,14 +1,7 @@
 import { config } from '@keystone-6/core';
 import { lists } from './schema';
 import { withAuth, session } from './auth';
-import {
-  BaseListTypeInfo,
-  FieldTypeFunc,
-  CommonFieldConfig,
-  fieldType,
-  orderDirectionEnum,
-} from '@keystone-6/core/types';
-import { graphql } from '@keystone-6/core';
+
 
 const {
 
@@ -19,33 +12,6 @@ const {
   ASSET_BASE_URL: baseUrl = "http://localhost:3000",
   
   } = process.env;
-
-  export type MyIntFieldConfig<ListTypeInfo extends BaseListTypeInfo> =
-  CommonFieldConfig<ListTypeInfo> & {
-    isIndexed?: boolean | 'unique';
-  };
-
-export const myInt =
-  <ListTypeInfo extends BaseListTypeInfo>({
-    isIndexed,
-    ...config
-  }: MyIntFieldConfig<ListTypeInfo> = {}): FieldTypeFunc<ListTypeInfo> =>
-  meta =>
-    fieldType({
-      kind: 'scalar',
-      mode: 'optional',
-      scalar: 'Int',
-      index: isIndexed === true ? 'index' : isIndexed || undefined,
-    })({
-      ...config,
-      input: {
-        create: { arg: graphql.arg({ type: graphql.Int }) },
-        update: { arg: graphql.arg({ type: graphql.Int }) },
-        orderBy: { arg: graphql.arg({ type: orderDirectionEnum }) },
-      },
-      output: graphql.field({ type: graphql.Int }),
-      views: './view',
-    });
 
 
 
