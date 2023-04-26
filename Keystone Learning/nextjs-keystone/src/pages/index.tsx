@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import type { NextPage, GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
-import { gql } from 'graphql-request';
-import { client } from '../util/request';
+// import { gql } from 'graphql-request';
+import  client  from '../util/request';
+import { gql , useQuery } from "@apollo/client";
 import { keystoneContext } from '../keystone/context';
 
 const Home: NextPage = ({ users }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -105,54 +106,105 @@ function ServerRenderedContent({
   );
 }
 
-function ClientRenderedContent() {
-  const [users, setUsers] = useState<Array<{ id: string; name: string; about: string | null }>>([]);
+// function ClientRenderedContent() {
+//   const [users, setUsers] = useState<Array<{ id: string; name: string; about: string | null }>>([]);
 
-  // Fetch users from REST api route
+//   // Fetch users from REST api route
+//   useEffect(() => {
+//     client
+//       .request(
+//         gql`
+//           {
+//             users {
+//               id
+//               name
+//               about
+//             }
+//           }
+//         `
+//       )
+//       .then((data: any) => {
+//         setUsers(data.users);
+//       });
+//   }, []);
+
+//   return (
+//     <div style={{ minHeight: '8rem' }}>
+//       <p>
+//         <strong>Users fetched from the browser (in useEffect())</strong>
+//       </p>
+//       {users.length ? (
+//         <ol>
+//           {users.map(u => {
+//             return (
+//               <li key={u.id}>
+//                 <span>{u.name} </span>
+//                 {u.about && (
+//                   <>
+//                     <hr />
+//                     {u.about}
+//                   </>
+//                 )}
+//               </li>
+//             );
+//           })}
+//         </ol>
+//       ) : (
+//         <div>loading...</div>
+//       )}
+//     </div>
+//   );
+// }
+
+const GET_USERS = gql`
+  query {
+    users {
+      id
+      name
+      about
+    }
+  }
+`;
+
+function ClientRenderedContent() {
+  const { loading, error, data } = useQuery(GET_USERS, { client });
+
+  const [users, setUsers] = useState<Array<{ id: string; name: string; about: string | null }>>([]);
   useEffect(() => {
-    client
-      .request(
-        gql`
-          {
-            users {
-              id
-              name
-              about
-            }
-          }
-        `
-      )
-      .then((data: any) => {
-        setUsers(data.users);
-      });
-  }, []);
+    if (data) {
+      setUsers(data.users);
+    }
+  }, [data]);
 
   return (
     <div style={{ minHeight: '8rem' }}>
       <p>
         <strong>Users fetched from the browser (in useEffect())</strong>
       </p>
-      {users.length ? (
-        <ol>
-          {users.map(u => {
-            return (
-              <li key={u.id}>
-                <span>{u.name} </span>
-                {u.about && (
-                  <>
-                    <hr />
-                    {u.about}
-                  </>
-                )}
-              </li>
-            );
-          })}
-        </ol>
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>Error: {error.message}</div>
       ) : (
-        <div>loading...</div>
+        <ol>
+          {users.map((user) => (
+            <li key={user.id}>
+              <span>{user.name}</span>
+              {user.about && (
+                <>
+                  <hr />
+                  {user.about}
+                </>
+              )}
+            </li>
+          ))}
+        </ol>
       )}
     </div>
   );
 }
+
+
+
 
 export default Home;

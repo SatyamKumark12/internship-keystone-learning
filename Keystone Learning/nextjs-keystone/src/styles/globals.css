@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -7,7 +11,7 @@ body {
 }
 
 html {
-  max-width: 70ch;
+  /* max-width: 70ch; */
   padding: 2em 1em;
   margin: auto;
   line-height: 1.75;

@@ -13,9 +13,9 @@ export default config(
     // provider: 'sqlite',
     // url: `file:${process.cwd()}/keystone.db`,
      // next.js requires an absolute path for sqlite
-    // onConnect: async (context: Context) => {
-    //   await seedDemoData(context);
-    // },
+    onConnect: async (context: Context) => {
+      await seedDemoData(context);
+    },
 
     // WARNING: this is only needed for our monorepo examples, dont do this
     prismaClientPath: 'node_modules/.myprisma/client',
@@ -25,5 +25,9 @@ export default config(
     ui: {
       isAccessAllowed: (context) => !!context.session?.data,
     },
+    server: {
+      cors: { origin: ['http://localhost:4000'], credentials: true },
+      port: 3000,
+    }
   })
 );

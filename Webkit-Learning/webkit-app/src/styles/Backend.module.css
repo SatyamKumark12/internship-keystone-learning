@@ -1,0 +1,212 @@
+.iqmediagroup .iqmedia {
+    margin-left: -20px;
+    position: relative;
+    z-index: 0;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out; }
+    .iqmediagroup .iqmedia:hover {
+      z-index: 9; }
+    .iqmediagroup .iqmedia img {
+      border: 2px solid #E0E2DB; }
+    .iqmedia-group .iqmedia:first-child {
+      margin-left: 0; }
+  
+  .iqmediagroup .iqmedia.border {
+    border: 2px solid #E0E2DB; }
+  
+  .iqmedia {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover; }
+    .iqmedia:hover {
+      text-decoration: none; }
+
+      .circleprogresscircle {
+        stroke-width: 6px;
+        stroke: #d0d8ff; }
+
+        .circleprogressvalue {
+            stroke-width: 6px;
+            stroke: #5773FF; }
+          
+          .circle-progress-circle {
+            stroke-width: 6px;
+            stroke: #d0d8ff; }
+          
+          .circleprogress > svg {
+            height: 100px;
+            width: 100px; }
+          
+          .circle-progress.sidebar-circle > svg {
+            height: 130px;
+            width: 130px; }
+          
+          .circleprogressprimary svg .circleprogressvalue {
+            stroke: #5773FF;
+            stroke-linecap: round; }
+          
+          .circleprogressprimary svg .circleprogresscircle {
+            stroke: #f0f3ff !important; }
+          
+          .circleprogressprimary svg .circleprogresstext {
+            fill: #5773FF;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circleprogresssecondary svg .circleprogressvalue {
+            stroke: #F35421;
+            stroke-linecap: round; }
+          
+          .circleprogresssecondary svg .circleprogresscircle {
+            stroke: #fbc4b2 !important; }
+          
+          .circleprogresssecondary svg .circleprogresstext {
+            fill: #F35421;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-success svg .circle-progress-value {
+            stroke: #50C6B4;
+            stroke-linecap: round; }
+          
+          .circle-progress-success svg .circle-progress-circle {
+            stroke: #c3ece5 !important; }
+          
+          .circle-progress-success svg .circle-progress-text {
+            fill: #50C6B4;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-info svg .circle-progress-value {
+            stroke: #51BBFE;
+            stroke-linecap: round; }
+          
+          .circle-progress-info svg .circle-progress-circle {
+            stroke: #e9f6ff !important; }
+          
+          .circle-progress-info svg .circle-progress-text {
+            fill: #51BBFE;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-warning svg .circle-progress-value {
+            stroke: #FFCF52;
+            stroke-linecap: round; }
+          
+          .circle-progress-warning svg .circle-progress-circle {
+            stroke: #fff9eb !important; }
+          
+          .circle-progress-warning svg .circle-progress-text {
+            fill: #FFCF52;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-danger svg .circle-progress-value {
+            stroke: #931F1D;
+            stroke-linecap: round; }
+          
+          .circle-progress-danger svg .circle-progress-circle {
+            stroke: #e16a68 !important; }
+          
+          .circle-progress-danger svg .circle-progress-text {
+            fill: #931F1D;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-light svg .circle-progress-value {
+            stroke: #c7cbd3;
+            stroke-linecap: round; }
+          
+          .circle-progress-light svg .circle-progress-circle {
+            stroke: white !important; }
+          
+          .circle-progress-light svg .circle-progress-text {
+            fill: #c7cbd3;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-dark svg .circle-progress-value {
+            stroke: #01041b;
+            stroke-linecap: round; }
+          
+          .circle-progress-dark svg .circle-progress-circle {
+            stroke: #061aaf !important; }
+          
+          .circle-progress-dark svg .circle-progress-text {
+            fill: #01041b;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-orange svg .circle-progress-value {
+            stroke: #F35421;
+            stroke-linecap: round; }
+          
+          .circle-progress-orange svg .circle-progress-circle {
+            stroke: #fbc4b2 !important; }
+          
+          .circle-progress-orange svg .circle-progress-text {
+            fill: #F35421;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-purple svg .circle-progress-value {
+            stroke: #4731b6;
+            stroke-linecap: round; }
+          
+          .circle-progress-purple svg .circle-progress-circle {
+            stroke: #a89ce4 !important; }
+          
+          .circle-progress-purple svg .circle-progress-text {
+            fill: #4731b6;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-skyblue svg .circle-progress-value {
+            stroke: #158df7;
+            stroke-linecap: round; }
+          
+          .circle-progress-skyblue svg .circle-progress-circle {
+            stroke: #a9d5fc !important; }
+          
+          .circle-progress-skyblue svg .circle-progress-text {
+            fill: #158df7;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-light-gray svg .circle-progress-value {
+            stroke: #f4f5fa;
+            stroke-linecap: round; }
+          
+          .circle-progress-light-gray svg .circle-progress-circle {
+            stroke: white !important; }
+          
+          .circle-progress-light-gray svg .circle-progress-text {
+            fill: #f4f5fa;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+          
+          .circle-progress-white svg .circle-progress-value {
+            stroke: #fff;
+            stroke-linecap: round; }
+          
+          .circle-progress-white svg .circle-progress-circle {
+            stroke: white !important; }
+          
+          .circle-progress-white svg .circle-progress-text {
+            fill: #fff;
+            font-size: 23px;
+            font-family: "Manrope", sans-serif; }
+      
+
+            .avatar40 {
+                height: 40px;
+                width: 40px;
+                line-height: 40px;
+                min-width: 40px; }
+              

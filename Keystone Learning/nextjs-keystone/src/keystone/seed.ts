@@ -5,14 +5,14 @@ export async function seedDemoData(context: Context) {
 
   for (const user of [
     {
-      name: 'Clark',
+      name: 'Satyam Kumar',
     },
-    {
-      name: 'Bruce',
-    },
-    {
-      name: 'Diana',
-    },
+    // {
+    //   name: 'Bruce',
+    // },
+    // {
+    //   name: 'Diana',
+    // },
   ] as const) {
     await context.db.User.createOne({ data: user });
   }

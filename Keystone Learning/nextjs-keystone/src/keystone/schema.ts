@@ -17,7 +17,7 @@ export const lists: Lists = {
       email: text({ validation: { isRequired: true }, isIndexed: 'unique' }),
       password: password({ validation: { isRequired: true } }),
       about: text(),
-      posts: relationship({ ref: 'Post.author', many: true }),
+      // posts: relationship({ ref: 'Post.author', many: true }),
       createdAt: timestamp({
         defaultValue: { kind: 'now' },
       }),
@@ -29,16 +29,18 @@ export const lists: Lists = {
     fields: {
       title: text(),
       publishedAt: timestamp(),
-      author: relationship({
-        ref: 'User.posts',
-        ui: {
-          displayMode: 'cards',
-          cardFields: ['name', 'email'],
-          inlineEdit: { fields: ['name', 'email'] },
-          linkToItem: true,
-          inlineCreate: { fields: ['name', 'email'] },
-        },
-      }),
+      // author: relationship({
+      //   ref: 'User.posts',
+      //   ui: {
+      //     displayMode: 'cards',
+      //     cardFields: ['name', 'email'],
+      //     inlineEdit: { fields: ['name', 'email'] },
+      //     linkToItem: true,
+      //     inlineCreate: { fields: ['name', 'email'] },
+      //   },
+      // }),
+
+      authors: relationship({ ref: 'User', many: true, }),
       content: document({
         formatting: true,
         links: true,
